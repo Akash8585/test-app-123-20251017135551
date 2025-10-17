@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaolf4rFL5N91yUfaekalpvcCqR9GqXbaQVuFld/utpZD1SBs8oZAG9Bswz" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            margin-top: 50px;
+        }
+        .calculator {
+            width: 345px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .calculator-display {
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .calculator-keys {
+            width: 100%;
+        }
+        .calculator-keys button {
+            width: 22%;
+            margin: 1%;
+            font-size: 1.2em;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="calculator-display form-control" id="calculator-display" disabled>
+        <div class="calculator-keys">
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('7')">7</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('8')">8</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('9')">9</button>
+            <button type="button" class="btn btn-outline-warning" onclick="setOperation('÷')">÷</button>
+            
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('4')">4</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('5')">5</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('6')">6</button>
+            <button type="button" class="btn btn-outline-warning" onclick="setOperation('×')">×</button>
+            
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('1')">1</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('2')">2</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('3')">3</button>
+            <button type="button" class="btn btn-outline-warning" onclick="setOperation('-')">−</button>
+
+            <button type="button" class="btn btn-outline-secondary" onclick="appendNumber('0')">0</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="appendDecimal()">.</button>
+            <button type="button" class="btn btn-outline-success" onclick="calculate()">=</button>
+            <button type="button" class="btn btn-outline-warning" onclick="setOperation('+')">+</button>
+            
+            <button type="button" class="btn btn-outline-danger" onclick="clearDisplay()">C</button>
+        </div>
+    </div>
+
+    <script>
+        let displayValue = '';
+        let currentOperation = null;
+        let firstOperand = null;
+
+        function appendNumber(number) {
+            displayValue += number;
+            updateDisplay();
+        }
+
+        function appendDecimal() {
+            if (!displayValue.includes('.')) {
+                displayValue += '.';
+                updateDisplay();
+            }
+        }
+
+        function setOperation(operation) {
+            if (currentOperation !== null) {
+                return;
+            }
+            firstOperand = parseFloat(displayValue);
+            currentOperation = operation;
+            displayValue = '';
+        }
+
+        function calculate() {
+            if (currentOperation === null || firstOperand === null) {
+                return;
+            }
+            let secondOperand = parseFloat(displayValue);
+            switch (currentOperation) {
+                case '+':
+                    displayValue = firstOperand + secondOperand;
+                    break;
+                case '-':
+                    displayValue = firstOperand - secondOperand;
+                    break;
+                case '×':
+                    displayValue = firstOperand * secondOperand;
+                    break;
+                case '÷':
+                    if (secondOperand !== 0) {
+                        displayValue = firstOperand / secondOperand;
+                    } else {
+                        displayValue = 'Error';
+                    }
+                    break;
+            }
+            firstOperand = null;
+            currentOperation = null;
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            displayValue = '';
+            currentOperation = null;
+            firstOperand = null;
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const display = document.getElementById('calculator-display');
+            display.value = displayValue;
+        }
+    </script>
+</body>
+</html>
